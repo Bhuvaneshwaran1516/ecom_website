@@ -1,0 +1,125 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+
+{% include 'nav.html' %}
+{% include 'message.html' %} 
+
+<style>
+     
+    body{
+      background-image: url("static/image/lo.jpg" );
+      background-repeat: no-repeat;
+      background-size:cover;
+     
+      
+    }
+</style>
+ 
+
+    <section >
+       
+          
+            <div class="container">
+              <div class="row ">
+            <div class="col ">
+              <div class="card mb-5 mt-5  me-lg-5  ms-4 me-4" style="border-radius: 1rem;">
+                <div class="row ">
+                  <div class="col-md-6 col-lg-5 d-none d-md-block">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
+                      alt="login form" class="img-fluid " style="border-radius: 1rem 0 0 1rem;" />
+                  </div>
+                  <div class="col-md-6  d-flex align-items-center">
+                    <div class="card-body p-4 p-lg-5 text-black">
+      
+                      <form method="POST">
+                        {% csrf_token %}
+      
+                        <div class="d-flex align-items-center mb-3 pb-1">
+                        
+                          <span class="h1 fw-bold mb-0"><img src="{% static 'image/logo.avif' %}" class="w-25 h-25"></span>
+                        </div>
+                  
+                        <h5 class="fw-bold mb-3 pt-4 pb-3" style="letter-spacing: 1px; color: darkcyan;">Sign into your account</h5>
+                     
+                        <div data-mdb-input-init class="form-outline mb-4">
+                          
+                          <label class="form-label fw-bolder" for="form2Example17" style="color:darkolivegreen;">User Name</label>
+                          <input type="text" id="username" name="user"  class="form-control form-control-lg" />
+                          <div id="usernameError" class="error fw-bolder" style="color: red;"></div>
+                        </div>
+      
+                        <div  class="form-outline mb-4">
+                          
+                          <label class="form-label fw-bolder" for="form2Example27"  style="color:darkolivegreen;">Password</label>
+                          <input type="password"  id="password" name="password" class="form-control form-control-lg " />
+                          <div id="passwordError" class="error fw-bolder mt-2" style="color: red;"></div>
+                        </div>
+      
+                        <div class="pt-1 mb-4">
+                          <button class="btn w-50 p-2" onclick="validateForm()" style="  background-color: rgb(89, 84, 89); color: aliceblue; ">Login</button>
+                        </div>
+      
+                        <!-- <a class="small text-muted" href="#!">Forgot password?</a> -->
+                        <p class="mb-5 mt-2 pb-lg-2" style="color: #a04949;">Don't have an account ? <a href="reg" class="fw-bolder"
+                            style="color: #393f81;">Register here</a></p>
+                        <!-- <a href="#!" class="small text-muted">Terms of use.</a>
+                        <a href="#!" class="small text-muted">Privacy policy</a> -->
+                      </form>
+      
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </section>
+ 
+      <script>
+        function validateForm() {
+    // Fetching values from inputs
+    var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
+
+    // Reset previous error messages
+    document.getElementById("usernameError").textContent = "";
+    document.getElementById("passwordError").textContent = "";
+
+    // Flag to track if there are errors
+    var hasError = false;
+
+    // Validation for username
+    if (username.trim() === "") {
+        document.getElementById("usernameError").textContent = "Username is required";
+        hasError = true;
+    }
+
+    // Validation for password
+    if (password.trim() === "") {
+        document.getElementById("passwordError").textContent = "Password is required";
+        hasError = true;
+    }
+
+    // Prevent the form from submitting if there are errors
+    if (hasError) {
+        return false;
+    }
+
+    // Normally, you would submit the form here if no errors
+    // For demonstration, we'll log a success message
+    console.log("Form submitted successfully");
+
+    // Clear form fields (optional)
+    document.getElementById("loginForm").reset();
+
+    // Prevent actual form submission
+    return false;
+}
+
+      </script>
+
+
+
+{% endblock %}

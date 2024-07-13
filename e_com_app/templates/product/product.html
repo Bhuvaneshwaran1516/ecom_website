@@ -1,0 +1,97 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+
+{% include 'nav.html' %}
+{% include 'message.html' %} 
+
+<style>
+  .fav{
+      background-color: red;
+        color: white;
+        width: 50px;
+        text-align: center;
+        font-weight: bold;
+        display: inline-block;
+        border-radius: 5px;
+        padding: 5px;  
+        right: 2px;    
+        top: 1px;
+        z-index: 10;
+        position: absolute;
+
+    }
+   
+</style>
+
+  <section  style="background-color: #eee; ">
+    <div class=" container py-5">
+      <h4 class="mt-  text-center"><strong>{{category}} Products And New Arivals </strong></h4>
+      <hr> 
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}" style="text-decoration: none;">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'category' %}" style="text-decoration: none;" >Category</a></li>
+            <li class="breadcrumb-item active">{{category}}</li>
+        </ol>
+
+      </nav>
+    </div>
+    <div class="container">
+      <div class="row d-flex justify-content-evenly">
+        {% for item in product %}
+        
+        <div class="col-lg-3  col-10 ms-3 ms-lg-0  col-md-6 mb-4 d-flex align-items-stretch ">
+          <div class="card mb-lg-4 mt-lg-2 mt-3 mt-md-4 text-center">
+            <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light box"
+              data-mdb-ripple-color="light ">
+              <div >
+                {% if user.is_authenticated %}
+                <a href="{% url 'add_to_favorites' item.id %}"  class="fav float-end" style="position: absolute;" >
+                    <i class="fa-regular fa-heart"></i></a>
+            {% else %}
+                    <a href="{% url 'login' %}?next={% url 'addtocart' item.id %} " class="fav float-end" style="position: absolute; "> 
+                    <i class="fa-regular fa-heart"></i></a>
+            {% endif %}
+
+
+              </div>
+              <a href="{% url 'product_details' category item.name %}" style="text-decoration: none; color: black;">
+              <img src="{{ item.image.url }}"
+                class="w-100 img-fluid card-img-top custom-img" style="position: relative;" />
+             
+                <div class="mask">
+                  <div class="d-flex justify-content-start align-items-end h-100">
+                    <h5><span class="badge bg-primary ms-2">New</span></h5>
+                    <h5><span class="badge bg-danger ms-2">-{{ item.discount }}%</span></h5>
+                    {% if item.trending %}
+                    <h5><span class="badge bg-info ms-2">                     
+                      <div>Hot</div>
+                      {% endif %}
+                    </span></h5>
+                  </div>
+                </div>
+                <div class="hover-overlay">
+                  <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                </div>
+              
+            </div>
+            <div class="card-body">
+              
+                <h5 class="card-title mb-3">{{ item.name }}</h5>
+              
+                <!-- <p>{{ item.description }}</p> -->
+             
+              <h6 class="text-danger mt-auto d-inline mt-5">₹: <s class=" me-2">{{ item.original_price }}</s>   ₹:{{ item.selling_price }}</h6> 
+        
+             </a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    </div>
+  </section>
+  
+{% endblock %}

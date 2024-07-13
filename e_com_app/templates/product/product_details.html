@@ -1,0 +1,142 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+
+{% include 'nav.html' %}
+{% include 'message.html' %}
+
+<style>
+
+.box{
+    position: relative;        
+
+}
+.hot{    
+    background-color: red;
+    color: white;
+    width: 50px;
+    text-align: center;
+    font-weight: bold;
+    display: inline-block;
+    border-radius: 5px;
+    padding: 5px;   
+    position: absolute;
+    z-index: 10;
+}
+</style>
+<section style="background-color: #eee;">
+ 
+    <div class=" container py-5 product_data">
+      <h4 class="   text-center"><strong>{{product}}  </strong></h4>    <hr >
+     
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}" style="text-decoration: none;">Home</a></li>            
+            <li class="breadcrumb-item"><a href="{% url 'category' %}" style="text-decoration: none;">Category</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'category' product.category.name %}" style="text-decoration: none;" >{{category}}</a></li>
+            <li class="breadcrumb-item active">{{product}}</li>
+        </ol>
+
+      </nav>
+    </div>
+      <div class="container">
+        <div class="row">
+            <div class="col-4 my-3 box">
+                {% if product.trending %}
+                <div class="hot">Hot</div>
+                {% endif %}
+                <img src="{{ product.image.url }}" class="w-100 card-img-top" />
+            </div>
+            <div class="col-8 my-3">
+                <h5 class="text-success">{{product}}</h5>
+                <p>{{product.vendor}}</p>
+                <p>{{product.description}}</p>
+                
+                <h6 class="text-danger d-inline mt-4"> <span class="me-2 fs-4"> ₹: {{product.selling_price}} </span>     ₹: <s >{{product.original_price}}</s>               
+                <span class="ms-2" style="background-color: rgb(200, 152, 193); color: aliceblue; padding: 3px;"> {{product.discount}}% off</span></h6> <br> 
+                {% csrf_token %}
+                {% if product.quantity > 0 %}
+                    <input type="hidden" value="{{product.id}}" id="pid">
+               
+                <!-- <p>
+                    <div class="input-group" style="width: 150px;">
+                        <button class="input-group-text bg-success text-light" id="btnmin"><i class="fa fa-minus"></i></button>
+                        <input type="text" name="qty" id="txtqty" value="1" class="form-control text-center">
+                        <button class="input-group-text bg-success text-light" id="btnplus"><i class="fa fa-plus"></i></button>
+
+                    </div>
+                </p> -->
+              
+                    <a href="{% url 'addtocart' product.id %}" class=" btn btn-primary mt-5"> 
+                    <i class="fa-solid fa-cart-shopping"></i><span class="ms-2">Add To Cart</span></a>              
+                
+                {% else %}
+                <button class="mt-5 btn btn-danger" style="color: white; padding: 7px; border-radius: 9px; border: none;"> 
+                    <i class="fa-solid fa-cart-shopping"></i><span class="ms-2">Product Out of stock</span></button>
+                {% endif %}
+               
+                    <a href="{% url 'add_to_favorites' product.id %}" class="ms-3 btn btn-danger mt-5 p-2" style="color: aliceblue;  background-color: red; border: none; ">
+                        <i class="fa-regular fa-heart"></i></a>
+            </div>
+        </div>
+      </div>
+            
+    
+    
+  </section>
+<!-- <script>
+document.addEventListener("DOMContentLoaded",function(event){
+    const btnplus=document.getElementById("btnplus");
+    const btnmin=document.getElementById("btnmin");
+    const txtqty=document.getElementById("txtqty");
+    const pid=document.getElementById("pid");
+    const btncart=document.getElementById("btncart");
+  
+
+
+
+    btnplus.addEventListener("click",function(){
+        let qty=parseInt(txtqty.value,10);
+        qty=isNaN(qty)?0:qty;
+
+        if(qty<10){
+            qty++;
+            txtqty.value=qty
+        }
+    });
+    btnmin.addEventListener("click",function(){
+        let qty=parseInt(txtqty.value,10);
+        qty=isNaN(qty)?0:qty;
+
+        if(qty>1){
+            qty--;
+            txtqty.value=qty
+        }
+    });
+    // $('#btncart').click(function (e){
+    //     e.preventDefault()
+    //     var product_id=$(this).closest('.product_data').find('#pid').val();
+    //     var c=$(this).closest('.product_data').find('#txtqty').val();
+    //     alert(c);
+    //     var product_qty=$(this).closest('.product_data').find('#txtqty').val();
+    //     var token=$('input[name=csrfmiddlewaretoken]').val();
+    //     $.ajax({
+    //         method:'POST',
+    //         url:'/addtocart',
+    //         data:{
+    //             'product_id':product_id,
+    //             'product_qty':product_qty,
+    //             csrfmiddlewaretoken:token
+    //         },
+    //         dataType:'datatype',
+    //         success:function(response){
+    //             console.log(response)
+
+    //         }
+    //     });
+    // });
+});
+
+</script> -->
+
+{% endblock %}

@@ -1,0 +1,83 @@
+
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+
+{% include 'nav.html' %}
+{% include 'message.html' %} 
+
+<section style="background-color: #eee;">
+ 
+    <div class=" container py-5 product_data">
+      <h4 class="   text-center"><strong>{{product}}  </strong></h4>    <hr >
+     
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}" style="text-decoration: none;">Home</a></li>      
+            <li class="breadcrumb-item"><a href="{% url 'search' %}" style="text-decoration: none;">Search</a></li>      
+
+           
+        </ol>
+
+      </nav>
+    </div>
+      <div class="container">
+        <div class="row">
+            
+            <div class="col-4 my-3 box">
+                {% if product.trending %}
+                <div class="hot">Hot</div>
+                {% endif %}
+                <img src="{{ product.image.url }}" class="w-100 card-img-top" />
+            </div>
+            <div class="col-8 my-3">
+                
+                <h5 class="text-success">{{product}}</h5>
+                <p>{{product.vendor}}</p>
+                <p>{{product.description}}</p>
+                
+                <h6 class="text-danger d-inline mt-4"> <span class="me-2 fs-4"> ₹: {{product.selling_price}} </span>     ₹: <s >{{product.original_price}}</s>               
+                <span class="ms-2" style="background-color: rgb(200, 152, 193); color: aliceblue; padding: 3px;"> {{product.discount}}% off</span></h6> <br> 
+                {% csrf_token %}
+                {% if product.quantity > 0 %}
+                    <input type="hidden" value="{{product.id}}" id="pid">
+               
+                <!-- <p>
+                    <div class="input-group" style="width: 150px;">
+                        <button class="input-group-text bg-success text-light" id="btnmin"><i class="fa fa-minus"></i></button>
+                        <input type="text" name="qty" id="txtqty" value="1" class="form-control text-center">
+                        <button class="input-group-text bg-success text-light" id="btnplus"><i class="fa fa-plus"></i></button>
+
+                    </div>
+                </p> -->
+                {% if user.is_authenticated %}
+                    <a href="{% url 'addtocart' product.id %}" class=" btn btn-primary mt-5"> 
+                    <i class="fa-solid fa-cart-shopping"></i><span class="ms-2">Add To Cart</span></a>
+                {% else %}
+                
+                <a href="{% url 'login' %}?next={% url 'addtocart' product.id %} " class="mt-5 btn " 
+                style=" color: aliceblue;  background-color: rgb(12, 132, 141); border-radius: 5px; border: none; padding: 10px; text-decoration: none;">
+                <i class="fa-solid fa-cart-shopping"></i> Login and add to Cart</a>
+
+                {% endif%}
+
+                {% else %}
+                <button class="mt-5 btn btn-danger" style="color: white; padding: 7px; border-radius: 9px; border: none;"> 
+                    <i class="fa-solid fa-cart-shopping"></i><span class="ms-2">Product Out of stock</span></button>
+                {% endif %}
+                {% if user.is_authenticated %}
+                    <a href="{% url 'add_to_favorites' product.id %}" class="ms-3 btn btn-danger mt-5" style="color: aliceblue;  background-color: red; border-radius: 5px; border: none; padding: 10px;">
+                        <i class="fa-regular fa-heart"></i></a>
+                {% else %}
+                        <a href="{% url 'login' %}?next={% url 'addtocart' product.id %} " class="mt-5 btn " 
+                        style=" color: aliceblue;  background-color: rgb(12, 132, 141); border-radius: 5px; border: none; padding: 10px; text-decoration: none;">
+                        <i class="fa-regular fa-heart"></i> Login and add to favorite</a>
+                {% endif %}
+
+            </div>
+        </div>
+      </div>   
+    
+  </section>
+
+  {% endblock %}

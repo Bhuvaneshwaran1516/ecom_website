@@ -1,0 +1,93 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+
+{% include 'nav.html' %}
+{% include 'message.html' %} 
+
+
+
+
+<div class=" container py-4 ">
+    <h4 class="   text-center " style="color: rgb(63, 8, 8);"><strong>ORDER SUMMARY</strong></h4>    <hr >
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}" style="text-decoration: none;">Home</a></li>            
+        <li class="breadcrumb-item"><a href="{% url 'order_list' %}" style="text-decoration: none;">Orders</a></li>          
+       
+    </ol>
+
+  </nav>
+</div>
+{% for item in order.items.all %}
+    <table class="table  table-striped table-hover table-bordered text-center container" style="font-weight: 600;">
+        <tr>
+            <td class="p-3">Order ID:</td>
+            <td class="p-3">{{ order.id }}</td>
+        </tr>
+        <tr>
+            <td class="p-3">Order Date:</td>
+            <td class="p-3">{{ order.order_date }}</td>
+        </tr>
+        <tr>
+            <td class="p-3">Shipping Address:</td>
+            {% if user.shippingaddress_set.exists %}
+                {% for address in user.shippingaddress_set.all %}
+            <td class="p-3">{{ address.address_line_1 }} {{ address.address_line_2 }},<br>{{ address.city }} , {{ address.state }} , 
+                ({{ address.postal_code }})<br> Phone No: {{ address.phone_number }}<br>             
+            
+            {% endfor %}
+            {% endif %}
+        </td>
+        </td>
+        </tr>
+        <tr>
+            <td class="p-3">Product Name: </td>
+            <td class="p-3">{{ item.product.name  }}</td>
+        </tr>
+        <tr>
+            <td class="p-3">Quantity:</td>
+            <td class="p-3">{{ item.quantity }}</td>
+        </tr>
+        <tr>
+            <td class="p-3">Original Price:</td>
+            <td class="p-3">₹{{ item.product.original_price }}</td>
+        </tr>
+       
+        <tr>
+            <td class="p-3">Discount:</td>
+            <td class="p-3"><i class="fa-solid fa-arrow-down"></i>{{ item.product.discount }}%</td>
+        </tr>
+        <tr>
+            <td class="p-3">Discount price:</td>
+            <td class="p-3">₹{{ item.product.selling_price }}</td>
+        </tr>
+        <tr>
+            <td class="p-3">Delivery Date:</td>
+            <td class="p-3"><i class="fa-solid fa-truck"></i>  {{ order.delivery_date }}</td>
+        </tr>
+
+        <tr>
+            <td class="p-3"> Total Amount( {{ item.quantity}} item):</td>
+            <td class="p-3">₹{{ order.total_price }}</td>
+        </tr>
+
+        
+    </table>
+    <div class=" d-flex justify-content-center mb-3">
+        <!-- Download Button -->
+        <a href="{% url 'order_summary_pdf' order.id %}" class="btn btn-primary text-center mb-3 mt-3" ><i class="fa-solid fa-download"></i> Download</a>
+    </div>
+
+    {% endfor %}
+    
+
+{% endblock %}
+
+
+
+
+
+
+

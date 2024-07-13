@@ -1,0 +1,126 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+
+{% include 'nav.html' %}
+{% include 'message.html' %} 
+<style>
+  .custom-img {
+      width: 100%;
+      height: 300px; /* Set the desired height */
+      object-fit:fill; /* Cover the area, maintaining aspect ratio */
+    }
+    .fav{
+      background-color: red;
+        color: white;
+        width: 50px;
+        text-align: center;
+        font-weight: bold;
+        display: inline-block;
+        border-radius: 5px;
+        padding: 5px;  
+        right: 2px;    
+        top: 1px;
+        z-index: 10;
+        position: absolute;
+
+    }
+   
+</style>    
+<!-- carousal -->
+<div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride=
+"carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="{% static 'image/off1.avif'%}" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item">
+      <img src="{% static 'image/off2.avif'%}" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item">
+      <img src="{% static 'image/off3.avif'%}" class="d-block w-100" alt="...">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+<!-- End carousal -->
+
+
+<!-- product -->
+
+<section style="background-color: #eee;">
+  <div class=" container-fluid  py-5">
+    <h4 class="mt-4   text-center"><strong>All Products And New Arivals </strong></h4>
+    <hr class="mb-5">
+
+    <div class="container">
+      <div class="row d-flex justify-content-evenly ">
+        {% for item in view %}
+        <div class="col-lg-3 col-10  col-md-6  mb-4 d-flex align-items-stretch ">
+          <div class="card mb-lg-4 mt-lg-2 mt-3 mt-md-4 text-center">
+            <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light box"
+              data-mdb-ripple-color="light ">
+              
+              <div>
+                {% if user.is_authenticated %}
+                <a href="{% url 'add_to_favorites' item.id %}" class=" fav  " style="position: absolute; color: #eee; background-color: red; ">
+                    <i class="fa-regular fa-heart"></i></a>
+            {% else %}
+                    <a href="{% url 'login' %}?next={% url 'addtocart' item.id %} " class="fav  float-end" style="position: absolute; color: #eee; background-color: red; "> 
+                    <i class="fa-regular fa-heart"></i></a>
+            {% endif %}
+              </div>
+              <a href="{% url 'product_details' item.category.name item.name %}" style="text-decoration: none; color: rgb(74, 119, 120);">
+              <img src="{{ item.image.url }}"
+                class="w-100 img-fluid card-img-top custom-img" style="position: relative;" />
+             
+                <div class="mask">
+                  <div class="d-flex justify-content-start align-items-end h-100">
+                    <h5><span class="badge bg-primary ms-2">New</span></h5>
+                    <h5><span class="badge bg-danger ms-2">-{{ item.discount }}%</span></h5>
+                    <h5><span class="badge bg-info ms-2">
+
+                      {% if item.trending %}
+                      <div>Hot</div>
+                      {% endif %}
+                    </span></h5>
+                  </div>
+                </div>
+                <div class="hover-overlay">
+                  <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                </div>
+              
+            </div>
+            
+            <div class="card-body">
+             
+              
+                <h5 class="card-title mb-3">{{ item.name }}</h5>
+              
+                <!-- <p>{{ item.description }}</p> -->
+              
+              <h6 class="text-danger d-inline  ">₹: <s class="me-2">{{ item.original_price }}</s>   ₹:{{ item.selling_price }}</h6> 
+              </a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+{% include 'footer.html' %}      
+
+
+<!-- end product -->
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+
+{% include 'nav.html' %}
+{% include 'message.html' %} 
+
+
+<div class=" container py-3 ">
+
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}" style="text-decoration: none;">Home</a></li>            
+        <li class="breadcrumb-item"><a href="{% url 'view_cart' %}" style="text-decoration: none;">View Cart</a></li>        
+       
+    </ol>
+
+  </nav>
+</div>
+<div class="container-fluid">
+   <div class="row">
+        
+<div class="col-12  mb-lg-3 ">
+    <div class="card  text-center">
+        <div class="card-body">
+         <label style="color: rgb(61, 85, 86); font-weight: 800;">DELIVERY ADDRESS:</label><br>     
+       
+            {% if user.shippingaddress_set.exists %}
+            {% for address in user.shippingaddress_set.all %}
+                    {{ address.address_line_1 }} {{ address.address_line_2 }},{{ address.city }} , {{ address.state }} , 
+            ({{ address.postal_code }})<br> Phone No: {{ address.phone_number }}<br>
+                    
+        
+        
+            <a href="{% url 'edit_shipping_address' address.id %}"  class="btn btn-secondary mt-2 "><i class="fa-solid fa-pen-to-square ms-2"></i> 
+                Edit Address</a>
+        </div>
+      
+      {% endfor %}
+{% else %}
+    <p>No shipping address on file.</p>
+        <a href="{% url 'add_shipping_address' %}" class="btn btn-secondary">Add Shipping Address</a>
+{% endif %} 
+
+</div>
+</div>
+</div>
+</div><hr>
+    <div class="container">
+        <div class="row">
+            <form method="POST">
+                {% csrf_token %}
+          
+            <div class="col-4  col-lg-3" style="height: min-content;">           
+                <img src="{{ product.image.url }}" class="w-100 card-img-top" />
+            </div>
+            
+            <div class="col-12 col-lg-9 my-3">
+    
+                <h5 class="text-success">{{product}}</h5>
+               
+                <p>{{product.vendor}}</p>
+                <p>{{product.description}}</p>
+                <p class=" fw-bold" style="color: rgb(108, 89, 86);font-size: 20px;">Available Stock : {{ product.quantity }}</p>
+               
+                <label class="fw-bold me-2" style="color: teal; font-size: large; ">
+                    Quantity</label> <input type="number" id="quantity" name="quantity" min="1" max="{{ product.quantity }}" value="1" style="border: none; 
+                color: aliceblue; background-color: rgb(128, 123, 115); padding: 3px; width: 50px; text-align: center;" ><br><br>
+    
+                
+                <h6 class="text-danger d-inline mt-4"> <span class="me-2 fs-4"> ₹: {{product.selling_price}} </span>     ₹: <s >{{product.original_price}}</s>               
+                <span class="ms-2" style="background-color: rgb(200, 152, 193); color: aliceblue; padding: 3px;"> {{product.discount}}% off</span></h6> <br> 
+              
+            <div class=" mt-4">
+       
+                <button type="submit" class="btn ms-lg-0 mb-5 "  
+                style="color: aliceblue;  background-color: rgb(255, 83, 83); border-radius: 5px; border: none; padding: 10px;">
+                
+                PLACE ORDER</button>
+               </div>
+        </div>
+       
+        </div>
+      </div>
+
+    </form>
+
+
+{% endblock %}

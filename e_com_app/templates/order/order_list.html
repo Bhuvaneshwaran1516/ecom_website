@@ -1,0 +1,58 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+
+{% include 'nav.html' %}
+{% include 'message.html' %} 
+
+
+
+<div class=" container py-4 ">
+    <h4 class="   text-center " style="color: rgb(63, 8, 8);"><strong>MY ORDERS</strong></h4>    <hr >
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}" style="text-decoration: none;">Home</a></li>                   
+       
+    </ol>
+
+  </nav>
+</div>
+
+        {% for order in orders %}
+        <div class="container">
+            <div class="row">
+        <div class="col-12 col-lg-12 my-3 ">
+            <a href="{% url 'order_summary' order.id %}" style="text-decoration: none;">
+
+            <h5 class="text-success">Order ID: {{order.id}}</h5> 
+            <h5 class="text-success">Total prize: ₹ {{order.total_price}}</h5> 
+            <h5 class="text-danger"><i class="fa-solid fa-truck"></i> Delivery By {{ order.delivery_date }}</h5> 
+
+            </a>    
+            <a href="{% url 'order_summary' order.id %}" class="btn btn-secondary mt-3" style="text-decoration: none;"> Order Summary</a>
+               
+         
+    
+                
+                <hr >
+                   
+                   
+        </div>
+        {% empty %}
+                    <p style="color: rgb(133, 92, 172); font-size: 25px; font-weight: bold; text-align: center;">Order is empty</p>
+        {% endfor %}
+    </div>
+   
+    </div>
+  
+  
+ 
+
+
+
+
+
+
+
+        {% endblock %}

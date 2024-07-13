@@ -1,0 +1,87 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+
+{% include 'nav.html' %}
+{% include 'message.html' %} 
+    
+<style>
+  .card{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    flex-direction: column;
+   
+      box-shadow: 0px 0px 10px rgb(168, 154, 154);
+    
+
+  }
+</style>
+
+    <div class=" container py-5 ">
+        <h4 class="   text-center " style="color: red;"><strong>MY FAVORITES </strong></h4>    <hr >
+       
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'home' %}" style="text-decoration: none;">Home</a></li>            
+              
+             
+          </ol>
+    
+        </nav>
+      </div>
+      <div class="container">
+        <div class="row d-flex justify-content-evenly">
+            {% for favorite in favorites %}
+          <div class="col-lg-3 col-10 ms-3 col-md-4 mb-4 d-flex align-items-stretch  ">
+            <div class="card">
+              <div>
+                <a href="{% url 'show_favorites' favorite.product.id  %}" style="text-decoration: none; color: rgb(113, 97, 97);">
+                <div class="bg-image hover-overlay hover-zoom hover-shadow ripple"  class="example-class">
+                  <img src="{{ favorite.product.image.url }}" class="w-100 " />
+                  
+                </div>
+                  <div class="mask">
+                    <div class="d-flex justify-content-start align-items-end h-100">
+                      <h5><span class="badge bg-primary ms-2">New</span></h5>
+                      <h5><span class="badge bg-danger ms-2">-{{ favorite.product.discount }}%</span></h5>
+                      {% if favorite.trending %}
+                      <h5><span class="badge bg-danger ms-2">                        
+                        <div class="hot">Hot</div>
+                        {% endif %}
+                      </span></h5>
+                    </div>
+                  </div>
+                  <div class="hover-overlay">
+                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                  </div>
+                
+              </div>
+              <div class="card-body">
+               
+                  <h5 class="card-title mb-3">{{  favorite.product.name }}</h5>
+                
+                  <!-- <p>{{ item.description }}</p> -->
+                <div class="">
+                <h6 class="text-danger d-inline mt-4">₹: <s class="me-2">{{  favorite.product.original_price }}</s>   ₹:{{  favorite.product.selling_price }}</h6> 
+                <a href="{% url 'remove_from_favorites' favorite.product.id %}" class="btn  float-end  ms-4" style="color: aliceblue;  background-color: red;
+                 border-radius: 5px; border: none; padding: 10px;""><i class="fa-regular fa-heart"></i> Remove</a>
+                </a>
+                </div>
+              </div>
+            </div>
+         
+            
+          </div>
+          {% empty %}
+          <p style="color: rgb(19, 51, 31); font-size: 25px; font-weight: bold; text-align: center;">Favorite is empty</p>
+          {% endfor %}
+        </div>
+      
+      </div>
+    
+
+
+{% endblock %}

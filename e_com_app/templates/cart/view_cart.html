@@ -1,0 +1,76 @@
+{% extends 'index.html'%}
+{% load static %}
+{% block content %}
+
+{% include 'nav.html' %}
+{% include 'message.html' %} 
+
+
+
+<div class=" container py-5 ">
+    <h4 class="   text-center " style="color: red;"><strong>MY CART </strong></h4>    <hr >
+   
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'home' %}" style="text-decoration: none;">Home</a></li>            
+        
+         
+      </ol>
+
+    </nav>
+  </div>
+
+
+
+
+<form method="POST" action="{% url 'view_cart' %}">
+    {% csrf_token %}
+<div class="container">
+    <div class="row">
+        {% for item in cart_items %}
+        <div class="col-6  col-lg-3" style="height: min-content;">           
+            <img src="{{ item.product.image.url }}" class="w-100 card-img-top" />
+        </div>
+        <div class="col-12 col-lg-9 my-5">
+            <a href="{% url 'show_cart' item.product.id  %}" style="text-decoration: none; color: rgb(113, 97, 97);">
+
+            <h5 class="text-success">{{item.product}}</h5>
+           
+            <p>{{item.product.vendor}}</p>
+            <p>{{item.product.description}}</p>
+
+
+            
+            <h6 class="text-danger d-inline mt-4"> <span class="me-2 fs-4"> ₹: {{item.product.selling_price}} </span>     ₹: <s >{{item.product.original_price}}</s>               
+            <span class="ms-2" style="background-color: rgb(200, 152, 193); color: aliceblue; padding: 3px;"> {{item.product.discount}}% off</span></h6> <br> 
+          
+               
+         
+           
+         
+                <a href="{% url 'buy_now' item.product.id %}" class=" mt-4 btn "
+                 style="color: aliceblue;  background-color: red; border-radius: 5px; border: none; padding: 10px;"> 
+                 <i class="fa-solid fa-bag-shopping"></i> BUY NOW</a>
+
+                 <a href="{% url 'remove_cart' item.product.id %}" class=" mt-4 ms-3  btn"
+                 style="color: aliceblue;  background-color: rgb(122, 78, 78); border-radius: 5px; border: none; padding: 10px; text-decoration: none;">
+                 <i class="fa-solid fa-trash"></i> REMOVE</a>
+            </a>
+                <hr >
+                  
+                   
+        </div>   
+        {% empty %}
+        <p style="color: rgb(133, 92, 172); font-size: 25px; font-weight: bold; text-align: center;">Your cart is empty</p>    
+       
+           {% endfor %}
+    </div>
+    </div>
+    <div class=" d-flex justify-content-center">
+        <p class=" mt-2 fw-bold" style="color: brown; font-size: 20px;">Total Cart Price: ₹ {{ total }}</p>
+      
+       </div>
+  </div>
+ 
+ 
+{% endblock %}
